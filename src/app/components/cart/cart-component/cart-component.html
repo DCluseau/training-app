@@ -1,0 +1,28 @@
+<div class="container">
+  <ng-container>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>NOM</th><th>QUANTITE</th><th>PRIX</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cartTraining of listCartTrainings; track cartTraining){
+          <tr>
+            <td>{{cartTraining.id}}</td>
+            <td>{{cartTraining.name}}</td>
+            <td>{{cartTraining.quantity}}</td>
+            <td>{{cartTraining.price}}</td>
+            <td><a class="btn btn-danger" (click)="removeFromCart(cartTraining)"> Supprimer </a></td>
+          </tr>
+        }
+        @empty {
+          <tr>
+            <td>No items found.</td>
+          </tr>
+        }
+        <a class="btn btn-success" (click)="onPlaceOrder()">Commander</a>
+      </tbody>
+    </table>
+  </ng-container>
+</div>

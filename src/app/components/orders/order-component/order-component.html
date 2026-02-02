@@ -1,0 +1,27 @@
+<h2>Your Order</h2>
+<table>
+    <thead>
+        <tr>
+            <th> Id </th> <th> Name </th> <th> Description </th> <th> Price </th> <th> Quantity </th> <th> Sub-total </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (training of trainings; track training.id){
+            <tr>
+                <td> {{training.id}} </td>
+                <td> {{training.name }} </td>
+                <td> {{training.description}}</td>
+                <td> {{training.price}} </td>
+                <td> {{training.quantity}}</td>
+                <td> Total price : {{training.price * training.quantity}}</td>
+            </tr>
+        }
+        @empty {
+            <td>Votre commande est vide.</td>
+        }
+    </tbody>
+</table>
+<p>
+    Total price : {{getTotalPrice()}}
+</p>
+<a class="btn btn-success" (click)="onPlaceOrder()">Order</a>
