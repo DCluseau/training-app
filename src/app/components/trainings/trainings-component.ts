@@ -24,6 +24,7 @@ export class TrainingsComponent implements OnInit {
 
  onAddToCart(training:TrainingModel){
   this.cartService.addTraining(training);
+  this.apiService.getTrainings().pipe
   this.router.navigateByUrl('cart');
  }
 

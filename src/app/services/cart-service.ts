@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { TrainingModel } from '../models/training-model.model';
+import { ApiService } from './api-service';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,7 @@ import { TrainingModel } from '../models/training-model.model';
 export class CartService {
   cart : TrainingModel[] = [];
 
-  constructor(){
+  constructor(private apiService : ApiService){
     this.getCartItems();
   }
   addToCart(training: TrainingModel): void {
@@ -21,8 +22,12 @@ export class CartService {
       this.cart.push(training);
     }
     localStorage.setItem('cartItems', JSON.stringify(this.cart));
+    this.putCart();
   }
 
+    putCart(){
+      this.apiService.postTrainings(this.cart);
+    }
 
   addTraining(training:TrainingModel){
     this.cart.push(training);

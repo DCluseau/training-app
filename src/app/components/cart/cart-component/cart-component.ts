@@ -18,6 +18,10 @@ export class CartComponent implements OnInit{
     this.listCartTrainings = this.cartService.getTraining();
   }
 
+  ngOnChange(){
+
+  }
+
   onSubmit(){
     this.router.navigateByUrl('customer');
   }
