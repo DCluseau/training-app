@@ -22,9 +22,6 @@ export class OrderComponent {
   }
 
   onPlaceOrder(): void {
-
-    //A faire : créer un service pour gérer les commandes
-    //Enregistrer la commande dans le local storage... ou dans un fichier json?
     alert('Commande effectuée avec succès');
     this.router.navigateByUrl('customer');
   }

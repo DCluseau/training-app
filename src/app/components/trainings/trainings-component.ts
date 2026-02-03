@@ -15,6 +15,7 @@ export class TrainingsComponent implements OnInit {
   listTrainings : TrainingModel[] | undefined;
   error : string = "";
   constructor(private cartService : CartService, private router : Router, private apiService : ApiService){
+
  }
 
  ngOnInit() : void{
