@@ -14,6 +14,6 @@ export class ApiService {
   }
 
   public getTraining(id : number){
-return this.http.get<TrainingModel>(environment.host + "/trainings/" + id);
+    return this.http.get<TrainingModel>(environment.host + "/trainings/" + id);
   }
 }
