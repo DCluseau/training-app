@@ -12,13 +12,9 @@ import { Router } from '@angular/router';
 })
 export class CustomerComponent {
   customer : CustomerModel = new CustomerModel(0, '', '', '', '', '', []);
-  constructor(public customerService : CustomerService, private router : Router){
+  constructor(public customerService : CustomerService, private router : Router){ }
 
-  }
-
-  nfOnInit(): void{
-
-  }
+  nfOnInit(): void{ }
 
   onSaveCustomer(customer: CustomerModel){
     this.customer = customer;
@@ -33,5 +29,4 @@ export class CustomerComponent {
   onSubmit(formValue: any): void {
     console.log('Form submitted with value:', formValue);
   }
-
 }

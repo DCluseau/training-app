@@ -22,20 +22,37 @@
       "quantity": 1
     }
   ],
-  "cart": [
+  "users" : [
     {
-      "id": "4",
-      "name": "Php",
-      "description": "Formation Dev/Web 4 jours",
-      "price": "1300",
-      "quantity": 1
-    },
+      "id" : 0,
+      "login" : "imbatman",
+      "pwd" : "joker"
+    }
+  ],
+  "customers" : [
     {
-      "id": "5",
-      "name": "NodeJs",
-      "description": "Prise en main de NodeJs/Express 2 jours",
-      "price": "1400",
-      "quantity": 1
+      "id": 0,
+      "lastname" : "batman",
+      "firstname" : "bruce",
+      "address" : "batcave",
+      "phone" : "0666542185",
+      "email" : "imbatman@dailyplanet.com",
+      "cart" : [
+        {
+          "id": "4",
+          "name": "Php",
+          "description": "Formation Dev/Web 4 jours",
+          "price": "1300",
+          "quantity": 1
+        },
+        {
+          "id": "5",
+          "name": "NodeJs",
+          "description": "Prise en main de NodeJs/Express 2 jours",
+          "price": "1400",
+          "quantity": 1
+        }
+      ]
     }
   ]
 }

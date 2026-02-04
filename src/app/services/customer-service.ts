@@ -13,7 +13,6 @@ export class CustomerService {
   }
 
   saveCustomer(customer : CustomerModel) : Observable<any>{
-    console.log(JSON.stringify(customer));
     return this.http.post<any>("http://localhost:3000/customer", JSON.stringify(customer));
   }
 }
