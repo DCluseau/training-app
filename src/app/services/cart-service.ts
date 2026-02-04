@@ -1,6 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { TrainingModel } from '../models/training-model.model';
-import { ApiService } from './api-service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { ApiService } from './api-service';
 export class CartService {
   cart : TrainingModel[] = [];
 
-  constructor(private apiService : ApiService){
+  constructor(private apiService : HttpClient){
     this.getCartItems();
   }
   addToCart(training: TrainingModel): void {
@@ -21,16 +22,24 @@ export class CartService {
     else {
       this.cart.push(training);
     }
-    localStorage.setItem('cartItems', JSON.stringify(this.cart));
-    this.putCart();
+    this.putCart(training);
   }
 
-    putCart(){
-      this.apiService.postTrainings(this.cart);
+    putCart(training : TrainingModel){
+      this.postCartItem(training).subscribe({
+      next: (data) => {
+        console.log("Response : " , data);
+      }
+    });
     }
+
+  public postCartItem(cartItem : TrainingModel) : Observable<any>{
+    return this.apiService.post<any>("http://localhost:3000/cart", JSON.stringify(cartItem));
+  }
 
   addTraining(training:TrainingModel){
     this.cart.push(training);
+    this.putCart(training);
   }
   getTraining(){
     return this.cart;
@@ -46,6 +55,6 @@ export class CartService {
   removeFromCart(training: TrainingModel): void {
     this.cart = this.getCartItems();
     this.cart = this.cart.filter(item => item.id !== training.id);
-    localStorage.setItem('cartItems', JSON.stringify(this.cart));
+    // localStorage.setItem('cartItems', JSON.stringify(this.cart));
   }
 }

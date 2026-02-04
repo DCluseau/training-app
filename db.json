@@ -1,21 +1,37 @@
 {
   "trainings": [
     {
-      "id": 3,
+      "id": "3",
       "name": "Python",
       "description": "Formation Python/Django 10 jours",
       "price": "2000",
       "quantity": 1
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Php",
       "description": "Formation Dev/Web 4 jours",
       "price": "1300",
       "quantity": 1
     },
     {
-      "id": 5,
+      "id": "5",
+      "name": "NodeJs",
+      "description": "Prise en main de NodeJs/Express 2 jours",
+      "price": "1400",
+      "quantity": 1
+    }
+  ],
+  "cart": [
+    {
+      "id": "4",
+      "name": "Php",
+      "description": "Formation Dev/Web 4 jours",
+      "price": "1300",
+      "quantity": 1
+    },
+    {
+      "id": "5",
       "name": "NodeJs",
       "description": "Prise en main de NodeJs/Express 2 jours",
       "price": "1400",

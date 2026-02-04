@@ -1,7 +1,8 @@
-import { CartService } from './../../../services/cart-service';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CustomerModel } from '../../../models/customer.model';
+import { CustomerService } from '../../../services/customer-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customer-component',
@@ -10,8 +11,8 @@ import { CustomerModel } from '../../../models/customer.model';
   styleUrl: './customer-component.css',
 })
 export class CustomerComponent {
-  customer = new CustomerModel(0, '', '', '', '', '');
-  constructor(public cartService : CartService){
+  customer : CustomerModel = new CustomerModel(0, '', '', '', '', '', []);
+  constructor(public customerService : CustomerService, private router : Router){
 
   }
 
@@ -20,8 +21,13 @@ export class CustomerComponent {
   }
 
   onSaveCustomer(customer: CustomerModel){
-    this.customer = customer
-    console.log(customer);
+    this.customer = customer;
+    this.customerService.saveCustomer(this.customer).subscribe({
+      next: (data) => {
+        console.log("Response : " , data);
+      }
+    });
+    this.router.navigateByUrl('trainings');
   }
 
   onSubmit(formValue: any): void {

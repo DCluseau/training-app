@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { TrainingModel } from '../models/training-model.model';
-import { CartService } from './cart-service';
-import { CartComponent } from '../components/cart/cart-component/cart-component';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +20,7 @@ export class ApiService {
 
   public postTrainings(cart : TrainingModel[]){
     console.log(JSON.stringify(cart));
-    this.http.post<TrainingModel>(environment.host + "/cart", cart);
+    this.http.post<TrainingModel[]>(environment.host + "/cart", cart);
   }
 
 }

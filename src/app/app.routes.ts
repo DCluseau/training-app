@@ -12,7 +12,7 @@ export const routes: Routes = [
   {path : 'order', component : OrderComponent}, // Affiche le composant OrderComponent lorsque l'URL est /order
   {path : 'customer', component : CustomerComponent}, // Affiche le composant CustomerComponent lorsque l'URL est /customer
   {path : 'user', component : UserComponent}, // Affiche le composant UserComponent lorsque l'URL est /user
-  {path : '', redirectTo: 'trainings', pathMatch: 'full'}, // Si l'URL est vide (/), refirige vers /trainings
+  {path : '', redirectTo: 'trainings', pathMatch: 'full'}, // Si l'URL est vide (/), redirige vers /trainings
   {path : '404', component: NotFoundComponent}, // Affiche le composant NotFoundComponent pour /404
   {path : '**', redirectTo: '/404'} // Gère toutes les URL non définies et les redirige vers /404
 ];
