@@ -2,6 +2,7 @@ import { AuthService } from './../../services/auth-service';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserModel } from '../../models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-component',
@@ -11,19 +12,31 @@ import { UserModel } from '../../models/user.model';
 })
 export class UserComponent {
   isAuth : boolean;
-  user : UserModel = new UserModel(0, "", "");
+  user : UserModel = new UserModel(0, "", "", "");
+  tabUser : UserModel[] = [];
 
-  constructor(private auth : AuthService){
+  constructor(private auth : AuthService, private router : Router){
     this.isAuth = false;
   }
 
   onAuthUser(user : UserModel){
     this.user = user;
-    if(this.auth.onLogin(user)){
-      this.isAuth = true;
-    }else{
-      this.isAuth = false;
+    let found : boolean = false;
+    this.auth.onLogin(this.user).subscribe({
+      next : (data) => this.tabUser = data
+    });
+    for(var i = 0; i < this.tabUser.length; i++){
+      if(this.user.login == this.tabUser[i].login && this.user.pwd == this.tabUser[i].pwd){
+        found = true;
+        this.user = this.tabUser[i];
+        this.isAuth = true;
+      }
     }
-    console.log(this.auth);
+    if(found){
+      this.router.navigateByUrl('trainings');
+    }else{
+      alert('Utilisateur non reconnu\nVeuillez vérifier votre Login et votre mot de passe.');
+      console.log(this.tabUser);
+    }
   }
 }

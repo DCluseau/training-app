@@ -14,17 +14,5 @@ export class AuthService {
 
   onLogin(user : UserModel){
     return this.http.get<UserModel[]>("http://localhost:3000/users");
-    // var found = false;
-    // for(var i = 0; i < this.tabUsers.length; i++){
-    //   if(this.tabUsers[i].login == user.login && this.tabUsers[i].pwd == user.pwd){
-    //     found = true;
-    //   }
-    // }
-    // console.log(this.tabUsers);
-    // if(found){
-    //   return true;
-    // }else{
-    //   return false;
-    // }
   }
 }

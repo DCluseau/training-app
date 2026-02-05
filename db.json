@@ -22,22 +22,23 @@
       "quantity": 1
     }
   ],
-  "users" : [
+  "users": [
     {
-      "id" : 0,
-      "login" : "imbatman",
-      "pwd" : "joker"
+      "id": "0",
+      "login": "imbatman",
+      "pwd": "joker",
+      "roles": "USER"
     }
   ],
-  "customers" : [
+  "customers": [
     {
-      "id": 0,
-      "lastname" : "batman",
-      "firstname" : "bruce",
-      "address" : "batcave",
-      "phone" : "0666542185",
-      "email" : "imbatman@dailyplanet.com",
-      "cart" : [
+      "id": "0",
+      "lastname": "batman",
+      "firstname": "bruce",
+      "address": "batcave",
+      "phone": "0666542185",
+      "email": "imbatman@dailyplanet.com",
+      "cart": [
         {
           "id": "4",
           "name": "Php",
@@ -50,9 +51,25 @@
           "name": "NodeJs",
           "description": "Prise en main de NodeJs/Express 2 jours",
           "price": "1400",
-          "quantity": 1
+          "quantity": 2
         }
       ]
+    },
+    {
+      "id": 1,
+      "lastname": "rthregher",
+      "firstname": "hrtfdhbdhb",
+      "address": "rgrtgr",
+      "phone": "hdhdhdh",
+      "email": "zgrzrgzr"
+    },
+    {
+      "id": 1,
+      "lastname": "grrgg",
+      "firstname": "hrtfdhbdhb",
+      "address": "hdhdh",
+      "phone": "gnjfsnoj",
+      "email": "jykygtkgu"
     }
   ]
 }

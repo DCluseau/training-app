@@ -4,6 +4,8 @@ import { CartService } from '../../services/cart-service';
 import { TrainingModel } from '../../models/training-model.model';
 import { ApiService } from '../../services/api-service';
 import { Router } from '@angular/router';
+import { CustomerModel } from '../../models/customer.model';
+import { CustomerComponent } from '../customer/customer-component/customer-component';
 
 @Component({
   selector: 'app-trainings',
@@ -14,7 +16,7 @@ import { Router } from '@angular/router';
 export class TrainingsComponent implements OnInit {
   listTrainings : TrainingModel[] | undefined;
   error : string = "";
-  constructor(private cartService : CartService, private router : Router, private apiService : ApiService){
+  constructor(private cartService : CartService, private router : Router, private apiService : ApiService, public customer : CustomerComponent){
 
  }
 
@@ -23,8 +25,9 @@ export class TrainingsComponent implements OnInit {
  }
 
  onAddToCart(training:TrainingModel){
-  this.cartService.addTraining(training);
-  this.apiService.getTrainings().pipe
+  this.customer.addToCart(training);
+  // this.cartService.addTraining(training);
+  // this.apiService.getTrainings().pipe;
   this.router.navigateByUrl('cart');
  }
 

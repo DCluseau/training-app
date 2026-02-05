@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CustomerModel } from '../../../models/customer.model';
 import { CustomerService } from '../../../services/customer-service';
 import { Router } from '@angular/router';
+import { TrainingModel } from '../../../models/training-model.model';
 
 @Component({
   selector: 'app-customer-component',
@@ -11,22 +12,83 @@ import { Router } from '@angular/router';
   styleUrl: './customer-component.css',
 })
 export class CustomerComponent {
-  customer : CustomerModel = new CustomerModel(0, '', '', '', '', '', []);
+  customer : CustomerModel = new CustomerModel(-1, '', '', '', '', '', []);
+  tabCustomers : CustomerModel[] = [];
   constructor(public customerService : CustomerService, private router : Router){ }
 
   nfOnInit(): void{ }
 
   onSaveCustomer(customer: CustomerModel){
+    // Récupérer d'abord l'id si il existe
+    console.log(customer);
     this.customer = customer;
-    this.customerService.saveCustomer(this.customer).subscribe({
-      next: (data) => {
-        console.log("Response : " , data);
-      }
-    });
-    this.router.navigateByUrl('trainings');
+    customer.id = this.searchCustomer(customer);
+    if(customer.id < 0){
+      this.customer.id = this.getLastId() + 1;
+      console.log(this.customer);
+      this.customerService.createCustomer(this.customer).subscribe({
+        next: (data) => {
+          // console.log("Response : " , data);
+        }
+      });
+    }else{
+      this.customerService.saveCustomer(this.customer).subscribe({
+        next: (data) => {
+          // console.log("Response : " , data);
+        }
+      });
+    }
+
+    this.router.navigateByUrl('cart');
   }
 
   onSubmit(formValue: any): void {
     console.log('Form submitted with value:', formValue);
+  }
+
+  getLastId(){
+    var id : number = 0;
+    this.getCustomers();
+    for(var i = 0; i < this.tabCustomers.length; i++){
+      if(this.tabCustomers[i].id > id){
+        id = this.tabCustomers[i].id;
+      }
+    }
+    return id;
+  }
+
+  // Récupérer tous les customers
+  getCustomers(){
+    this.customerService.getCustomers().subscribe({
+      next : (data) => {
+        this.tabCustomers = data;
+      }
+    });
+  }
+
+  // Chercher un customer
+  searchCustomer(customer : CustomerModel){
+    if(this.tabCustomers.length == 0){
+      this.getCustomers();
+    }
+    for(var i = 0; i < this.tabCustomers.length; i++){
+      if(this.tabCustomers[i].lastname == customer.lastname && this.tabCustomers[i].firstname == customer.firstname){
+        customer.id = this.tabCustomers[i].id;
+        return customer.id;
+      }
+    }
+    return -1;
+  }
+
+  addToCart(training : TrainingModel){
+    if(this.customer.id < 0){
+
+    }
+    this.customer.cart.push(training);
+    this.customerService.saveCustomer(this.customer).subscribe({
+      next: (data) => {
+        // console.log("Response : " , data);
+      }
+    });
   }
 }
