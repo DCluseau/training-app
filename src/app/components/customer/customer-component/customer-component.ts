@@ -1,4 +1,4 @@
-import { Component, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { Component, Injectable, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CustomerModel } from '../../../models/customer.model';
 import { CustomerService } from '../../../services/customer-service';
@@ -11,34 +11,29 @@ import { TrainingModel } from '../../../models/training-model.model';
   templateUrl: './customer-component.html',
   styleUrl: './customer-component.css',
 })
+
+@Injectable({
+  providedIn: 'root',
+})
+
 export class CustomerComponent {
   customer : CustomerModel = new CustomerModel(-1, '', '', '', '', '', []);
   tabCustomers : CustomerModel[] = [];
   constructor(public customerService : CustomerService, private router : Router){ }
 
-  nfOnInit(): void{ }
+  ngOnInit(): void{ }
 
   onSaveCustomer(customer: CustomerModel){
     // Récupérer d'abord l'id si il existe
-    console.log(customer);
     this.customer = customer;
     customer.id = this.searchCustomer(customer);
     if(customer.id < 0){
       this.customer.id = this.getLastId() + 1;
-      console.log(this.customer);
-      this.customerService.createCustomer(this.customer).subscribe({
-        next: (data) => {
-          // console.log("Response : " , data);
-        }
-      });
+      this.customerService.createCustomer(this.customer);
     }else{
-      this.customerService.saveCustomer(this.customer).subscribe({
-        next: (data) => {
-          // console.log("Response : " , data);
-        }
-      });
+      this.customerService.saveCustomer(this.customer);
     }
-
+    console.log(this.customer);
     this.router.navigateByUrl('cart');
   }
 
@@ -81,14 +76,13 @@ export class CustomerComponent {
   }
 
   addToCart(training : TrainingModel){
-    if(this.customer.id < 0){
-
-    }
     this.customer.cart.push(training);
-    this.customerService.saveCustomer(this.customer).subscribe({
-      next: (data) => {
-        // console.log("Response : " , data);
-      }
-    });
+    console.log(this.customer);
+    if(this.customer.id < 0){
+      alert("Veuillez entrer vos informations de livraison");
+      this.router.navigateByUrl('customers');
+    }else{
+      this.customerService.saveCustomer(this.customer);
+    }
   }
 }
