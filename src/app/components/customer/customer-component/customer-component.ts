@@ -1,7 +1,7 @@
+import { ApiService } from './../../../services/api-service';
 import { Component, Injectable, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CustomerModel } from '../../../models/customer.model';
-import { CustomerService } from '../../../services/customer-service';
 import { Router } from '@angular/router';
 import { TrainingModel } from '../../../models/training-model.model';
 
@@ -17,24 +17,45 @@ import { TrainingModel } from '../../../models/training-model.model';
 })
 
 export class CustomerComponent {
-  customer : CustomerModel = new CustomerModel(-1, '', '', '', '', '', []);
+  customer : CustomerModel;
   tabCustomers : CustomerModel[] = [];
-  constructor(public customerService : CustomerService, private router : Router){ }
-
-  ngOnInit(): void{ }
+  constructor(public apiService : ApiService, private router : Router){
+    this.apiService.getCustomers().subscribe({
+      next : (data) => this.tabCustomers = data
+    });
+    this.customer = this.apiService.currentCustomer;
+    if(this.customer.id < 0){
+      this.customer.cart = [];
+    }
+   }
+  ngOnInit(): void{
+    this.apiService.getCustomers().subscribe({
+      next : (data) => this.tabCustomers = data
+    });
+    this.customer = this.apiService.currentCustomer;
+    if(this.customer.id < 0){
+      this.customer.cart = [];
+    }
+   }
 
   onSaveCustomer(customer: CustomerModel){
     // Récupérer d'abord l'id si il existe
     this.customer = customer;
     customer.id = this.searchCustomer(customer);
+    console.log(this.customer);
     if(customer.id < 0){
       this.customer.id = this.getLastId() + 1;
-      this.customerService.createCustomer(this.customer);
+      this.apiService.createCustomer(this.customer).subscribe({
+        next : (data) => console.log(JSON.stringify(data))
+      });
     }else{
-      this.customerService.saveCustomer(this.customer);
+      this.apiService.saveCustomer(this.customer).subscribe({
+        next : (data) => console.log(JSON.stringify(data))
+      });
     }
+    this.apiService.setCurrentCostumer(this.customer);
     console.log(this.customer);
-    this.router.navigateByUrl('cart');
+    this.router.navigateByUrl('customers');
   }
 
   onSubmit(formValue: any): void {
@@ -54,7 +75,7 @@ export class CustomerComponent {
 
   // Récupérer tous les customers
   getCustomers(){
-    this.customerService.getCustomers().subscribe({
+    this.apiService.getCustomers().subscribe({
       next : (data) => {
         this.tabCustomers = data;
       }
@@ -76,13 +97,23 @@ export class CustomerComponent {
   }
 
   addToCart(training : TrainingModel){
-    this.customer.cart.push(training);
+    var found : boolean = false;
+    for(var i = 0; i < this.customer.cart.length; i++){
+      if(this.customer.cart[i].id == training.id){
+        this.customer.cart[i].quantity += 1;
+        found = true;
+      }
+    }
+    if(!found){
+      this.customer.cart.push(training);
+    }
     console.log(this.customer);
     if(this.customer.id < 0){
       alert("Veuillez entrer vos informations de livraison");
-      this.router.navigateByUrl('customers');
+      return false;
     }else{
-      this.customerService.saveCustomer(this.customer);
+      this.apiService.saveCustomer(this.customer);
+      return true;
     }
   }
 }

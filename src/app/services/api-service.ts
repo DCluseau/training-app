@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
@@ -13,7 +14,7 @@ export class ApiService {
   currentCustomer : CustomerModel = new CustomerModel(-1, '', '', '', '', '', []);
   tabUsers : UserModel[] = [];
   cart : TrainingModel[] = [];
-  constructor(private http: HttpClient){ }
+  constructor(private http: HttpClient, private router: Router){ }
 
   // Méthodes pour les trainings
   public getTrainings(){
@@ -25,49 +26,55 @@ export class ApiService {
   }
 
   public postTrainings(cart : TrainingModel[]){
-    this.http.post<TrainingModel[]>(environment.host + "/cart", cart);
+    this.http.post<TrainingModel[]>(environment.host + "/trainings", cart);
   }
 
   // Méthodes pour le customer (cart + customer)
-  saveCustomer(customer : CustomerModel) : Observable<any>{
-    return this.http.put<any>(environment.host + "/customers/" + customer.id, JSON.stringify(customer));
+  saveCustomer(customer : CustomerModel) : Observable<CustomerModel>{
+    return this.http.put<CustomerModel>(environment.host + "/customers/" + customer.id, JSON.stringify(customer), {headers: {'Content-Type' : 'application/json'}});
   }
 
-  createCustomer(customer : CustomerModel){
-    return this.http.post<any>(environment.host + "/customers", JSON.stringify(customer));
+  createCustomer(customer : CustomerModel) : Observable<CustomerModel>{
+    return this.http.post<CustomerModel>(environment.host + "/customers", JSON.stringify(customer), {headers: {'Content-Type' : 'application/json'}});
   }
 
-  deleteCustomer(customer : CustomerModel){
-      return this.http.delete<any>(environment.host + "/customers/" + customer.id);
+  deleteCustomer(customer : CustomerModel) : Observable<CustomerModel>{
+      return this.http.delete<CustomerModel>(environment.host + "/customers/" + customer.id);
   }
 
   getCustomers(){
     return this.http.get<any>(environment.host + "/customers");
   }
 
-  addToCart(training: TrainingModel): void {
-    this.cart = this.getCartItems();
-    let existingTraining = this.cart.find(item => item.id === training.id);
+  setCurrentCostumer(customer: CustomerModel){
+    this.currentCustomer = customer;
+  }
 
-    if (existingTraining) {
-      existingTraining.quantity += training.quantity;
+  // saveCustomers(customer : CustomerModel){
+  //   return this.http.put<any>(environment.host + "/customers", JSON.stringify(customer));
+  // }
+
+  addToCart(training: TrainingModel): void {
+    console.log(this.currentCustomer);
+    if(this.currentCustomer.cart == undefined || this.currentCustomer.cart.length == 0){
+        this.currentCustomer.cart = [];
+      }
+    if(this.currentCustomer.id < 0){
+      this.currentCustomer.cart.push(training);
+      this.router.navigateByUrl('customers');
+    }else{
+      this.currentCustomer.cart.push(training);
+      this.putCart(training);
     }
-    else {
-      this.cart.push(training);
-    }
-    this.putCart(training);
   }
 
     putCart(training : TrainingModel){
-      this.postCartItem(training).subscribe({
-      next: (data) => {
-        console.log("Response : " , data);
-      }
-    });
+      this.postCartItem(training);
+      console.log(this.currentCustomer);
     }
 
   public postCartItem(cartItem : TrainingModel) : Observable<any>{
-    return this.http.post<any>(environment.host + "/cart", JSON.stringify(cartItem));
+    return this.http.post<any>(environment.host + "/customers/" + this.currentCustomer.id, JSON.stringify(cartItem), {headers: {'Content-Type' : 'application/json'}});
   }
 
   addTraining(training:TrainingModel){
@@ -90,7 +97,7 @@ export class ApiService {
 
   // Méthodes user
   onLogin(user : UserModel){
-    return this.http.get<UserModel[]>(environment.host + "/users");
+    return this.http.get<UserModel[]>(environment.host + "/users/" + user.id);
   }
 
 }

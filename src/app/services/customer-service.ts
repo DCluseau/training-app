@@ -25,5 +25,4 @@ export class CustomerService {
   getCustomers(){
     return this.http.get<any>("http://localhost:3000/customers");
   }
-
 }

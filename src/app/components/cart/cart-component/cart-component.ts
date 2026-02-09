@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { CartService } from '../../../services/cart-service';
+import { ApiService } from '../../../services/api-service';
 import { TrainingModel } from './../../../models/training-model.model';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,11 +11,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CartComponent implements OnInit{
   listCartTrainings : TrainingModel[] = [];
-  constructor(private cartService: CartService, private router:Router){
+  constructor(private apiService: ApiService, private router:Router){
 
   }
   ngOnInit(){
-    this.listCartTrainings = this.cartService.getTraining();
+    this.listCartTrainings = this.apiService.getCartItems();
   }
 
   ngOnChange(){
@@ -23,15 +23,19 @@ export class CartComponent implements OnInit{
   }
 
   onSubmit(){
-    this.router.navigateByUrl('customer');
+    this.router.navigateByUrl('order');
   }
 
   removeFromCart(training: TrainingModel): void {
-    this.cartService.removeFromCart(training);
-    this.listCartTrainings = this.cartService.getCartItems();
+    this.apiService.removeFromCart(training);
+    this.listCartTrainings = this.apiService.getCartItems();
   }
 
   onPlaceOrder(): void {
-    this.router.navigateByUrl('order');
+    if(this.apiService.currentCustomer.id < 0){
+      this.router.navigateByUrl('customers');
+    }else{
+      this.router.navigateByUrl('order');
+    }
   }
 }

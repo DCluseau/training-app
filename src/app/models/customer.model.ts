@@ -7,7 +7,7 @@ export class CustomerModel {
   address : string;
   phone : string;
   email : string;
-  cart : TrainingModel[];
+  cart : TrainingModel[] = [];
 
   constructor(id:number,lastname:string,firstname:string,address:string, phone:string, email:string, cart : TrainingModel[]){
     this.id = id;
@@ -16,6 +16,10 @@ export class CustomerModel {
     this.address = address;
     this.phone = phone;
     this.email = email;
-    this.cart = cart;
+    if(this.cart.length >= 0){
+      this.cart = cart;
+    }else{
+      this.cart = [];
+    }
   }
 }
